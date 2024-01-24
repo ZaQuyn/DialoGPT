@@ -67,7 +67,7 @@ def set_seed(args: Args):
         torch.cuda.manual_seed_all(args.seed)
 
 
-def _sorted_checkpoint(
+def sorted_checkpoint(
     args: Args, checkpoint_prefix="checkpoint", use_mtime=False
 ) -> List[str]:
     ordering_and_checkpoint_path = []
@@ -100,7 +100,7 @@ def rotate_checkpoints(
         return None
 
     # Check if we should delete older checkpoint(s)
-    checkpoints_sorted = _sorted_checkpoint(args, checkpoint_prefix, use_mtime)
+    checkpoints_sorted = sorted_checkpoint(args, checkpoint_prefix, use_mtime)
     if len(checkpoints_sorted) <= args.save_total_limit:
         return None
 
