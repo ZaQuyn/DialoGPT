@@ -25,7 +25,7 @@ class Args:
         self.do_eval = True
         self.evaluate_during_training = False
         self.per_gpu_train_batch_size = 4
-        self.per_gpt_eval_batch_size = 4
+        self.per_gpu_eval_batch_size = 4
         self.gradient_accumulation_steps = 1
         self.learning_rate = 5e-5
         self.weight_decay = 0.0
@@ -91,7 +91,7 @@ def _sorted_checkpoint(
     return checkpoints_sorted
 
 
-def _rotate_checkpoints(
+def rotate_checkpoints(
     args: Args, checkpoint_prefix="checkpoint", use_mtime=False, logger: Logger = None
 ) -> None:
     if not args.save_total_limit:

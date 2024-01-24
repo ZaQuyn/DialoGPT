@@ -6,13 +6,14 @@ import torch
 from torch.utils.data import Dataset
 import os
 import logging
+from logging import Logger
 import pickle
 import sys
 
 from utils.helper import Args
 
 # Config logger
-logger = logging.getLogger(name=__name__)
+# logger = logging.getLogger(name=__name__)
 
 
 class ConversationDataset(Dataset):
@@ -22,6 +23,7 @@ class ConversationDataset(Dataset):
         args: Args,
         df: pd.DataFrame,
         block_size: int = 512,
+        logger: Logger = logging.getLogger(name=__name__)
     ) -> None:
         super().__init__()
 
