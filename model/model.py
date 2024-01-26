@@ -17,8 +17,7 @@ import glob
 from evaluate import evaluate
 
 
-def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger):
-    args = Args()
+def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger, args: Args):
 
     if args.should_continue:
         sorted_checkpoints = sorted_checkpoint(args)
