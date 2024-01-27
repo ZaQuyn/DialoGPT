@@ -14,7 +14,7 @@ from torch.utils.tensorboard import SummaryWriter
 import torch
 import os
 from logging import Logger
-from tqdm.notebook import tqdm, trange
+from tqdm import tqdm, trange
 from utils.helper import set_seed, rotate_checkpoints
 from model.evaluate import evaluate
 
@@ -222,7 +222,7 @@ def train(
                         amp.master_params(optimizer), args.max_grad_norm
                     )
                 else:
-                    torch.nn.utils.clip_grad_norm(model.paramters(), args.max_grad_norm)
+                    torch.nn.utils.clip_grad_norm(model.parameters(), args.max_grad_norm)
                 optimizer.step()
                 scheduler.step()
                 model.zero_grad()

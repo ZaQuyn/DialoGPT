@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader, SequentialSampler
 import torch
 import os
 from logging import Logger
-from tqdm.notebook import tqdm, trange
+from tqdm import tqdm, trange
 from utils.helper import load_and_cache_examples
 
 

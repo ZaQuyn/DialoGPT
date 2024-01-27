@@ -39,7 +39,10 @@ def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger, args: Arg
         )
 
     # Setup CUDA, GPU & distributed training
-    device = torch.device("cuda")
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
     args.n_gpu = torch.cuda.device_count()
     args.device = device
 
@@ -73,7 +76,7 @@ def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger, args: Arg
             args, tokenizer, df_train, df_val, evaluate=False
         )
 
-        global_step, train_loss = train(args, train_dataset, model, tokenizer)
+        global_step, train_loss = train(args, train_dataset, model, tokenizer, logger)
         logger.info(f"  global_step = {global_step}, average loss = {train_loss}")
 
     # Saving best-practices: if you use save_pretrained for the model and tokenizer, you can reload them using from_pretrained()
