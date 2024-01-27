@@ -12,9 +12,9 @@ import os
 import logging
 from logging import Logger
 from utils.helper import sorted_checkpoint, set_seed, load_and_cache_examples
-from train import train
+from model.train import train
 import glob
-from evaluate import evaluate
+from model.evaluate import evaluate
 
 
 def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger, args: Args):

@@ -10,7 +10,7 @@ import os
 import re
 from logging import Logger
 import shutil
-from argument import Args
+from utils.argument import Args
 
 
 # Cacheing and storing of data/checkpoints

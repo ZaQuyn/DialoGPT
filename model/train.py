@@ -16,7 +16,7 @@ import os
 from logging import Logger
 from tqdm.notebook import tqdm, trange
 from utils.helper import set_seed, rotate_checkpoints
-import evaluate
+from model.evaluate import evaluate
 
 
 def train(
