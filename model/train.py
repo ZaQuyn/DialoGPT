@@ -5,7 +5,7 @@ from transformers import (
     PreTrainedTokenizer,
     get_linear_schedule_with_warmup,
 )
-from utils.helper import Args
+from utils.argument import Args
 from typing import Dict, List, Tuple
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, Dataset, RandomSampler

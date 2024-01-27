@@ -10,7 +10,7 @@ from logging import Logger
 import pickle
 import sys
 
-from utils.helper import Args
+from utils.argument import Args
 
 # Config logger
 # logger = logging.getLogger(name=__name__)

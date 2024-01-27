@@ -6,7 +6,7 @@ from transformers import (
     AutoModelWithLMHead,
     AutoTokenizer,
 )
-from utils.helper import Args
+from utils.argument import Args
 import torch
 import os
 import logging
@@ -18,7 +18,6 @@ from evaluate import evaluate
 
 
 def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger, args: Args):
-
     if args.should_continue:
         sorted_checkpoints = sorted_checkpoint(args)
         if len(sorted_checkpoints) == 0:
@@ -58,12 +57,11 @@ def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger, args: Arg
     set_seed(args)
 
     config = AutoConfig.from_pretrained(args.config_name, cache_dir=args.cache_dir)
-    tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name, cache_dir=args.cache_dir)
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.tokenizer_name, cache_dir=args.cache_dir
+    )
     model = AutoModelWithLMHead.from_pretrained(
-        args.model_name_or_path,
-        from_tf=False,
-        config=config,
-        cache_dir=args.cache_dir
+        args.model_name_or_path, from_tf=False, config=config, cache_dir=args.cache_dir
     )
     model.to(args.device)
 
@@ -71,7 +69,9 @@ def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger, args: Arg
 
     # Training
     if args.do_train:
-        train_dataset = load_and_cache_examples(args, tokenizer, df_train, df_val, evaluate=False)
+        train_dataset = load_and_cache_examples(
+            args, tokenizer, df_train, df_val, evaluate=False
+        )
 
         global_step, train_loss = train(args, train_dataset, model, tokenizer)
         logger.info(f"  global_step = {global_step}, average loss = {train_loss}")
@@ -86,7 +86,7 @@ def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger, args: Arg
         # They can then be reloaded using `from_pretrained()`
         model_to_save = (
             model.module if hasattr(model, "module") else model
-        ) # Take care of distributed/parallel training
+        )  # Take care of distributed/parallel training
         model_to_save.save_pretrained(args.output_dir)
         tokenizer.save_pretrained(args.output_dir)
 
@@ -104,18 +104,25 @@ def main(df_train: pd.DataFrame, df_val: pd.DataFrame, logger: Logger, args: Arg
         checkpoints = [args.output_dir]
         if args.eval_all_checkpoints:
             checkpoints = list(
-                os.path.dirname(c) for c in sorted(glob.glob(args.output_dir + "/**/" + WEIGHTS_NAME, recursive=True))
+                os.path.dirname(c)
+                for c in sorted(
+                    glob.glob(args.output_dir + "/**/" + WEIGHTS_NAME, recursive=True)
+                )
             )
-            logging.getLogger("transformers.modeling_utils").setLevel(logging.WARN) # Reduce logging
+            logging.getLogger("transformers.modeling_utils").setLevel(
+                logging.WARN
+            )  # Reduce logging
         logger.info(f"Evaluate the following checkpoints: {checkpoints}")
         for checkpoint in checkpoints:
             global_step = checkpoint.split("-")[-1] if len(checkpoints) > 1 else ""
-            prefix = checkpoint.split("/")[-1] if checkpoint.find("checkpoint") != -1 else ""
+            prefix = (
+                checkpoint.split("/")[-1] if checkpoint.find("checkpoint") != -1 else ""
+            )
 
             model = AutoModelWithLMHead.from_pretrained(checkpoint)
             model.to(args.device)
             result = evaluate(args, model, tokenizer, df_train, df_val, prefix=prefix)
             result = dict((k + f"_{global_step}", v) for k, v in result.items())
             result.update(result)
-        
+
     return result

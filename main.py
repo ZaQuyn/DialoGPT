@@ -3,7 +3,7 @@ import logging
 from transformers import MODEL_WITH_LM_HEAD_MAPPING
 from data_loader import preprocess
 import pandas as pd
-from utils.helper import Args
+from utils.argument import Args
 
 # Configs
 logger = logging.getLogger(__name__)

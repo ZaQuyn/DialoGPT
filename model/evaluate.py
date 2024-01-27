@@ -3,7 +3,7 @@ from transformers import (
     PreTrainedModel,
     PreTrainedTokenizer,
 )
-from utils.helper import Args
+from utils.argument import Args
 from typing import Dict, List, Tuple
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, SequentialSampler
@@ -71,7 +71,7 @@ def evaluate(
             lm_loss = outputs[0]
             eval_loss += lm_loss.mean().item()
         nb_eval_steps += 1
-    
+
     eval_loss = eval_loss / nb_eval_steps
     perplexity = torch.exp(torch.tensor(eval_loss))
 
@@ -83,5 +83,5 @@ def evaluate(
         for key in sorted(result.keys()):
             logger.info(f"{key} = {str(result[key])}")
             writer.write("%s = %s\n" % (key, str(result[key])))
-    
+
     return result
